@@ -1,7 +1,7 @@
-import { ModuleWithProviders }  from '@angular/core';
+import { ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {ForecastsListComponent} from "./forecasts-list/forecasts-list.component";
-import {MainPageComponent} from "./main-page/main-page.component";
+import { ForecastsListComponent } from "./forecasts-list/forecasts-list.component";
+import { MainPageComponent } from "./main-page/main-page.component";
 
 const appRoutes: Routes = [
   {
@@ -11,4 +11,5 @@ const appRoutes: Routes = [
     path: 'forecast/:zipcode', component: ForecastsListComponent
   }
 ];
-export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
+
+export const routing: ModuleWithProviders<any> = RouterModule.forRoot(appRoutes);
