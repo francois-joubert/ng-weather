@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from "@angular/router";
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { WeatherService } from "../weather.service";
 import { WeatherConditions } from '../types';
+import { LocationService } from '../location.service';
 
 @Component({
   selector: 'app-current-conditions',
@@ -16,12 +16,13 @@ export class CurrentConditionsComponent
 
   constructor(
     private weatherService: WeatherService,
+    private locationService: LocationService,
     private router: Router)
   {
     this.currentConditions$ = this.weatherService.currentConditions$;
   }
 
-  showForecast(zipcode: string)
+  onShowForecast(zipcode: string)
   {
     this.router.navigate(['/forecast', zipcode])
   }
@@ -29,5 +30,10 @@ export class CurrentConditionsComponent
   onRefreshNow()
   {
     this.weatherService.refreshAll();
+  }
+
+  onCloseClick(zipcode: string)
+  {
+    this.locationService.removeLocation(zipcode);
   }
 }

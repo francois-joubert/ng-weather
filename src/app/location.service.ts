@@ -17,16 +17,22 @@ export class LocationService
     if (locString)
       this.locations = JSON.parse(locString);
     for (let loc of this.locations)
-      this.weatherService.addCurrentConditions(loc);
+      this.weatherService.addCurrentConditionsAsync(loc);
 
     autoRefreshService.init(30000);
   }
 
-  addLocation(zipcode: string)
+  async addLocationAsync(zipcode: string)
   {
+    if (!zipcode)
+    {
+      console.warn(`Not a valid zipcode: ${zipcode}`);
+      return;
+    }
+
     this.locations.push(zipcode);
     localStorage.setItem(LOCATIONS, JSON.stringify(this.locations));
-    this.weatherService.addCurrentConditions(zipcode);
+    await this.weatherService.addCurrentConditionsAsync(zipcode);
   }
 
   removeLocation(zipcode: string)

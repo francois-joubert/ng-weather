@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Subject, forkJoin, empty } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { WeatherConditions } from './types';
-import { forkJoin } from 'rxjs';
 
 @Injectable()
 export class WeatherService
@@ -17,14 +16,13 @@ export class WeatherService
 
   constructor(private http: HttpClient) { }
 
-  addCurrentConditions(zipcode: string): void
+  async addCurrentConditionsAsync(zipcode: string)
   {
     // Here we make a request to get the curretn conditions data from the API. Note the use of backticks and an expression to insert the zipcode
-    this.getConditions(zipcode).subscribe(conditions =>
-    {
-      this.currentConditions.push(conditions);
-      this.currentConditions$.next(this.currentConditions);
-    });
+    let conditions = await this.getConditions(zipcode).toPromise();
+
+    this.currentConditions.push(conditions);
+    this.currentConditions$.next(this.currentConditions);
   }
 
   removeCurrentConditions(zipcode: string)
@@ -74,8 +72,13 @@ export class WeatherService
 
   getConditions(zipcode: string)
   {
-    return this.http.get(`${WeatherService.URL}/weather?zip=${zipcode},us&units=imperial&APPID=${WeatherService.APPID}`)
-      .pipe(map(data => ({ zip: zipcode, data: data, timestamp: new Date() })));
+    return this.http.get(`${WeatherService.URL}/weather?zip=${zipcode},us&units=imperial&APPID=${WeatherService.APPID}`).pipe(
+      map(data => ({ zip: zipcode, data: data, timestamp: new Date() })),
+      catchError(err =>
+      {
+        console.warn(`Status: ${err.status} | ${err.error.message}`);
+        return empty();
+      }));
   }
 
   getForecast(zipcode: string)

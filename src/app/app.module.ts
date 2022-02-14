@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { ZipcodeEntryComponent } from './zipcode-entry/zipcode-entry.component';
 import { CurrentConditionsComponent } from './current-conditions/current-conditions.component';
+import { ButtonComponent } from './button/button.component';
 import { routing } from "./app.routing";
 import { ForecastsListComponent } from './forecasts-list/forecasts-list.component';
 import { LocationService } from "./location.service";
@@ -22,6 +23,7 @@ import { AutoRefreshService } from "./auto-refresh.service";
     ZipcodeEntryComponent,
     ForecastsListComponent,
     CurrentConditionsComponent,
+    ButtonComponent,
     MainPageComponent
   ],
   imports: [

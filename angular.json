@@ -32,7 +32,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -45,8 +44,19 @@
                 }
               ],
               "serviceWorker": true
+            },
+            "dev": {
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "namedChunks": true,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": false
             }
-          }
+          },
+          "defaultConfiguration": "dev"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",

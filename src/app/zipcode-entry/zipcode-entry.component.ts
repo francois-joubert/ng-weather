@@ -1,16 +1,27 @@
-import { Component } from '@angular/core';
-import {LocationService} from "../location.service";
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { LocationService } from "../location.service";
+import { ButtonComponent } from '../button/button.component';
 
 @Component({
   selector: 'app-zipcode-entry',
   templateUrl: './zipcode-entry.component.html'
 })
-export class ZipcodeEntryComponent {
+export class ZipcodeEntryComponent
+{
+  @ViewChild("zipcodeInput")
+  input: ElementRef<HTMLInputElement>;
 
-  constructor(private service : LocationService) { }
+  @ViewChild("button")
+  button: ButtonComponent;
 
-  addLocation(zipcode : string){
-    this.service.addLocation(zipcode);
+  constructor(private service: LocationService) { }
+
+  async onAddClick()
+  {
+    let zipcode = this.input.nativeElement.value;
+    this.input.nativeElement.value = "";
+
+    await this.service.addLocationAsync(zipcode);
+    this.button.settle();
   }
-
 }
