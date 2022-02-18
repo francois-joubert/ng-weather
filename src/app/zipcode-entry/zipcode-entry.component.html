@@ -1,5 +1,7 @@
 <div class="well">
-  <h2>Enter a zipcode:</h2>
+  <h2>Select a country:</h2>
+  <app-auto-complete [options]="countries" (selectionchange)="onSelectionChange($event)"></app-auto-complete>
+  <h3>Enter a zipcode:</h3>
   <input type="text" #zipcodeInput placeholder="Zipcode" class="form-control">
   <br>
   <app-button #button (buttonclick)="onAddClick()">Add location</app-button>

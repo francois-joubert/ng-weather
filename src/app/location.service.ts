@@ -14,15 +14,18 @@ export class LocationService
     autoRefreshService: AutoRefreshService)
   {
     let locString = localStorage.getItem(LOCATIONS);
-    if (locString)
-      this.locations = JSON.parse(locString);
+    if (locString) { this.locations = JSON.parse(locString); }
+
     for (let loc of this.locations)
-      this.weatherService.addCurrentConditionsAsync(loc);
+    {
+      let [countryCode, zipcode] = loc.split("|");
+      this.weatherService.addCurrentConditionsAsync(countryCode, zipcode);
+    }
 
     autoRefreshService.init(30000);
   }
 
-  async addLocationAsync(zipcode: string)
+  async addLocationAsync(countryCode: string, zipcode: string)
   {
     if (!zipcode)
     {
@@ -30,19 +33,19 @@ export class LocationService
       return;
     }
 
-    this.locations.push(zipcode);
+    this.locations.push(`${countryCode}|${zipcode}`);
     localStorage.setItem(LOCATIONS, JSON.stringify(this.locations));
-    await this.weatherService.addCurrentConditionsAsync(zipcode);
+    await this.weatherService.addCurrentConditionsAsync(countryCode, zipcode);
   }
 
-  removeLocation(zipcode: string)
+  removeLocation(countryCode: string, zipcode: string)
   {
-    let index = this.locations.indexOf(zipcode);
+    let index = this.locations.indexOf(`${countryCode}|${zipcode}`);
     if (index !== -1)
     {
       this.locations.splice(index, 1);
       localStorage.setItem(LOCATIONS, JSON.stringify(this.locations));
-      this.weatherService.removeCurrentConditions(zipcode);
+      this.weatherService.removeCurrentConditions(countryCode, zipcode);
     }
   }
 }

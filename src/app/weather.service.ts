@@ -16,18 +16,18 @@ export class WeatherService
 
   constructor(private http: HttpClient) { }
 
-  async addCurrentConditionsAsync(zipcode: string)
+  async addCurrentConditionsAsync(countryCode: string, zipcode: string)
   {
     // Here we make a request to get the curretn conditions data from the API. Note the use of backticks and an expression to insert the zipcode
-    let conditions = await this.getConditions(zipcode).toPromise();
+    let conditions = await this.getConditions(countryCode, zipcode).toPromise();
 
     this.currentConditions.push(conditions);
     this.currentConditions$.next(this.currentConditions);
   }
 
-  removeCurrentConditions(zipcode: string)
+  removeCurrentConditions(countryCode: string, zipcode: string)
   {
-    let i = this.currentConditions.findIndex(c => c.zip == zipcode);
+    let i = this.currentConditions.findIndex(c => c.countryCode == countryCode && c.zip == zipcode);
     if (i >= 0)
     {
       this.currentConditions.splice(i, 1);
@@ -58,7 +58,7 @@ export class WeatherService
     let tasks$ = []
     for (let conditions of this.currentConditions)
     {
-      let task$ = this.getConditions(conditions.zip)
+      let task$ = this.getConditions(conditions.countryCode, conditions.zip)
         .pipe(tap(newConditions =>
         {
           conditions.data = newConditions.data;
@@ -70,10 +70,10 @@ export class WeatherService
     return forkJoin(...tasks$).subscribe(() => this.currentConditions$.next(this.currentConditions));
   }
 
-  getConditions(zipcode: string)
+  getConditions(countryCode: string, zipcode: string)
   {
-    return this.http.get(`${WeatherService.URL}/weather?zip=${zipcode},us&units=imperial&APPID=${WeatherService.APPID}`).pipe(
-      map(data => ({ zip: zipcode, data: data, timestamp: new Date() })),
+    return this.http.get(`${WeatherService.URL}/weather?zip=${zipcode},${countryCode}&units=imperial&APPID=${WeatherService.APPID}`).pipe(
+      map(data => ({ countryCode, zip: zipcode, data: data, timestamp: new Date() })),
       catchError(err =>
       {
         console.warn(`Status: ${err.status} | ${err.error.message}`);

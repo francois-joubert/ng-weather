@@ -32,8 +32,8 @@ export class CurrentConditionsComponent
     this.weatherService.refreshAll();
   }
 
-  onCloseClick(zipcode: string)
+  onCloseClick(conditions: WeatherConditions)
   {
-    this.locationService.removeLocation(zipcode);
+    this.locationService.removeLocation(conditions.countryCode, conditions.zip);
   }
 }

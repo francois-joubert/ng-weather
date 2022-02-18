@@ -14,14 +14,28 @@ export class ZipcodeEntryComponent
   @ViewChild("button")
   button: ButtonComponent;
 
+  countries = [
+    { value: "us", label: "USA" },
+    { value: "ca", label: "Canada" },
+    { value: "fr", label: "France" },
+    { value: "au", label: "Australia" }
+  ];
+
+  selectedCountryCode: string = "us";
+
   constructor(private service: LocationService) { }
+
+  onSelectionChange(option: { value: string })
+  {
+    this.selectedCountryCode = option.value;
+  }
 
   async onAddClick()
   {
     let zipcode = this.input.nativeElement.value;
     this.input.nativeElement.value = "";
 
-    await this.service.addLocationAsync(zipcode);
+    await this.service.addLocationAsync(this.selectedCountryCode, zipcode);
     this.button.settle();
   }
 }

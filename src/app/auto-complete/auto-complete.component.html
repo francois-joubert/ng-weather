@@ -1,0 +1,8 @@
+<input type="text" title="Country selection" placeholder="Select a country"
+       autocomplete="off" autofocus (input)="onInput()" class="form-control"
+       [(ngModel)]="inputValue" />
+
+<div id="options-container">
+  <div *ngFor="let option of displayOptions" class="option"
+       (mousedown)="onOptionClick(option)">{{option.labelS}}<b>{{option.labelMatch}}</b>{{option.labelE}}</div>
+</div>
