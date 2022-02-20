@@ -4,5 +4,12 @@
   <h3>Enter a zipcode:</h3>
   <input type="text" #zipcodeInput placeholder="Zipcode" class="form-control">
   <br>
-  <app-button #button (buttonclick)="onAddClick()">Add location</app-button>
+  <app-button #button (buttonclick)="onAddClick()">
+    <span ready>Add location</span>
+    <div pending>
+      <div class="spinner-border" role="status"></div>
+      <span>Loading...</span>
+    </div>
+    <span settled>Done</span>
+  </app-button>
 </div>

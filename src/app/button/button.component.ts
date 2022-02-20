@@ -1,4 +1,5 @@
 import { Component, Output, EventEmitter, Input, HostBinding } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-button',
@@ -6,22 +7,25 @@ import { Component, Output, EventEmitter, Input, HostBinding } from '@angular/co
 })
 export class ButtonComponent
 {
-  @Input() @HostBinding("class") state: ButtonState = 'ready';
+  @Input() @HostBinding("class") currentState: ButtonState = 'ready';
 
   @Output() buttonclick = new EventEmitter<MouseEvent>();
 
-  constructor() { }
+  state: Subject<ButtonState>;
 
-  settle()
-  {
-    this.state = 'settled';
-    setTimeout(() => this.state = 'ready', 500);
-  }
+  constructor() { }
 
   onClick(e: MouseEvent)
   {
+    this.currentState = 'pending';
     this.buttonclick.emit(e);
-    this.state = 'pending';
+
+    this.state = new Subject();
+    this.state.subscribe(null, null, () =>
+    {
+      this.currentState = 'settled';
+      setTimeout(() => this.currentState = 'ready', 500);
+    });
   }
 }
 

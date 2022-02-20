@@ -36,6 +36,6 @@ export class ZipcodeEntryComponent
     this.input.nativeElement.value = "";
 
     await this.service.addLocationAsync(this.selectedCountryCode, zipcode);
-    this.button.settle();
+    this.button.state.complete();
   }
 }

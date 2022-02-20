@@ -1,12 +1,11 @@
-<ng-container [ngSwitch]="state">
+<ng-container [ngSwitch]="currentState">
   <button *ngSwitchCase="'ready'" class="btn btn-primary" (click)="onClick($event)">
-    <ng-content></ng-content>
+    <ng-content select="[ready]"></ng-content>
   </button>
   <button *ngSwitchCase="'pending'" class="btn btn-warning" type="button" disabled>
-    <div class="spinner-border" role="status"></div>
-    <span>Loading...</span>
+    <ng-content select="[pending]"></ng-content>
   </button>
   <button *ngSwitchCase="'settled'" class="btn btn-success" type="button" disabled>
-    Done
+    <ng-content select="[settled]"></ng-content>
   </button>
 </ng-container>
